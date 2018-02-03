@@ -1,39 +1,70 @@
 import React,{ Component } from "react";
-import { View } from "react-native";
+import { View, Dimensions } from "react-native";
 import MapView from "react-native-maps";
 
+const {width,height} = Dimensions.get("window");
+
+const SCREEN_H = height;
+const SCREEN_W = width;
+const ASPECT_RATIO = SCREEN_W/SCREEN_H;
+const LATITUDE_DELTA = 0.0922;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 class App extends Component{
 
+    state = {
 
+        initialPosition:{
+            latitude: 0,
+            longitude: 0,
+            latitudeDelta: LATITUDE_DELTA,
+            longitudeDelta: LONGITUDE_DELTA
+        }
+
+    };
+
+    componentDidMount(){
+
+        navigator.geolocation.getCurrentPosition((position) =>{
+
+            lat = parseFloat(position.coords.latitude);
+            lon = parseFloat(position.coords.longitude);
+
+            currentPosition = {
+                latitude: lat,
+                longitude: lon,
+                latitudeDelta: LATITUDE_DELTA,
+                longitudeDelta: LONGITUDE_DELTA
+            };
+
+            this.setState({initialPosition : currentPosition});
+
+        })
+
+    }
 
     render(){
       return(
-          <View style={{flex : 1}}>
+          <View style = {{flex : 1}}>
               <MapView
 
-                  initialRegion={{
-                      latitude: 37.78825,
-                      longitude: -122.4324,
-                      latitudeDelta: 0.0922,
-                      longitudeDelta: 0.0421
-                  }}
+                  initialRegion = {this.state.initialPosition}
 
                   style={styles.MapViewStyles}
               >
 
-                  <MapView.Marker
+                  {/*<MapView.Marker*/}
 
-                      coordinate={{
-                          latitude: 37.78825,
-                          longitude: -122.4324
-                      }}
-                  >
-                      <View style={styles.radius}>
-                          <View style={styles.markerStyles}/>
-                      </View>
+                      {/*coordinate={{*/}
+                          {/*latitude: 0,*/}
+                          {/*longitude: 0*/}
+                      {/*}}*/}
+                  {/*>*/}
+                      {/*<View style={styles.radius}>*/}
+                          {/*<View style={styles.markerStyles}/>*/}
+                      {/*</View>*/}
 
-                  </MapView.Marker>
+                  {/*</MapView.Marker>*/}
 
               </MapView>
 
