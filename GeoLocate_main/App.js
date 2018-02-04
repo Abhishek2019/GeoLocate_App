@@ -1,6 +1,7 @@
 import React,{ Component } from "react";
 import { View, Dimensions } from "react-native";
 import MapView from "react-native-maps";
+import { PermissionsAndroid } from 'react-native';
 
 const {width,height} = Dimensions.get("window");
 
@@ -9,6 +10,28 @@ const SCREEN_W = width;
 const ASPECT_RATIO = SCREEN_W/SCREEN_H;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+
+
+async function requestLocationPermission() {
+    try {
+        const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            {
+                'title': 'Access Location Permission',
+                'message': ' App needs access to your GPS ' +
+                'so we can track your location.'
+            }
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            console.log("You can use the location")
+        } else {
+            console.log("Location access permission denied")
+        }
+    } catch (err) {
+        console.warn(err)
+    }
+}
+
 
 class App extends Component{
 
@@ -19,9 +42,25 @@ class App extends Component{
             longitude: 0,
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA
+        },
+        markerCoordinates : {
+
+            latitude: 0,
+            longitude: 0,
         }
 
     };
+
+    componentWillMount(){
+
+        if(!(PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION))){
+
+            this.requestLocationPermission()
+
+        }
+
+    }
+
 
     componentDidMount(){
 
@@ -37,34 +76,44 @@ class App extends Component{
                 longitudeDelta: LONGITUDE_DELTA
             };
 
-            this.setState({initialPosition : currentPosition});
+            currentMarkerPosition = {
+                latitude: lat,
+                longitude: lon,
+            };
 
-        })
+
+            this.setState({initialPosition : currentPosition});
+            this.setState({markerCoordinates : currentMarkerPosition});
+
+        },(error) => alert(JSON.stringify(error))
+            )
 
     }
+
+
 
     render(){
       return(
           <View style = {{flex : 1}}>
               <MapView
-
                   initialRegion = {this.state.initialPosition}
 
                   style={styles.MapViewStyles}
               >
 
-                  {/*<MapView.Marker*/}
+                  <MapView.UrlTile
+                      urlTemplate = "http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
 
-                      {/*coordinate={{*/}
-                          {/*latitude: 0,*/}
-                          {/*longitude: 0*/}
-                      {/*}}*/}
-                  {/*>*/}
+                  <MapView.Marker
+
+                      coordinate={this.state.markerCoordinates}
+                  >
                       {/*<View style={styles.radius}>*/}
                           {/*<View style={styles.markerStyles}/>*/}
                       {/*</View>*/}
 
-                  {/*</MapView.Marker>*/}
+                  </MapView.Marker>
 
               </MapView>
 
