@@ -129,10 +129,11 @@ class App extends Component{
                   initialRegion = {this.state.initialPosition}
                   style={styles.MapViewStyles}
                   mapType = "standard"
-                  showsMyLocationButton = {true}
+                  showsMyLocationButton
                   showsTraffic = {true}
                   zoomEnabled = {true}
                   loadingEnabled = {true}
+                 showsUserLocation
               >
 
 
