@@ -131,6 +131,8 @@ class App extends Component{
                   mapType = "standard"
                   showsMyLocationButton = {true}
                   showsTraffic = {true}
+                  zoomEnabled = {true}
+                  loadingEnabled = {true}
               >
 
 
