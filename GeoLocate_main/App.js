@@ -41,7 +41,8 @@ class App extends Component{
             latitude: 0,
             longitude: 0,
             latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA
+            longitudeDelta: LONGITUDE_DELTA,
+            watchID: 0,
         },
         markerCoordinates : {
 
@@ -69,6 +70,30 @@ class App extends Component{
             lat = parseFloat(position.coords.latitude);
             lon = parseFloat(position.coords.longitude);
 
+            initialPosition = {
+                latitude: lat,
+                longitude: lon,
+                latitudeDelta: LATITUDE_DELTA,
+                longitudeDelta: LONGITUDE_DELTA
+            };
+
+            initialMarkerPosition = {
+                latitude: lat,
+                longitude: lon,
+            };
+
+
+            this.setState({initialPosition : initialPosition});
+            this.setState({markerCoordinates : initialMarkerPosition});
+
+        },(error) => alert(JSON.stringify(error))
+            );
+
+            ID = navigator.geolocation.watchPosition((position) => {
+
+            lat = parseFloat(position.coords.latitude);
+            lon = parseFloat(position.coords.longitude);
+
             currentPosition = {
                 latitude: lat,
                 longitude: lon,
@@ -82,28 +107,36 @@ class App extends Component{
             };
 
 
-            this.setState({initialPosition : currentPosition});
+            this.setState({watchID : ID  ,initialPosition : currentPosition});
             this.setState({markerCoordinates : currentMarkerPosition});
 
-        },(error) => alert(JSON.stringify(error))
-            )
+
+        })
+
 
     }
 
+    componentWillUnmount(){
 
+        navigator.geolocation.clearWatch(this.state.watchID);
+
+    }
 
     render(){
       return(
           <View style = {{flex : 1}}>
               <MapView
                   initialRegion = {this.state.initialPosition}
-
                   style={styles.MapViewStyles}
+                  mapType = "standard"
+                  showsMyLocationButton = {true}
+                  showsTraffic = {true}
               >
 
-                  <MapView.UrlTile
-                      urlTemplate = "http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  />
+
+                  {/*<MapView.UrlTile*/}
+                      {/*urlTemplate = "http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"*/}
+                  {/*/>*/}
 
                   <MapView.Marker
 
@@ -125,10 +158,10 @@ class App extends Component{
 
 const styles ={
   MapViewStyles:{
-      left: 10,
-      right: 10,
-      top:10,
-      bottom: 10,
+      left: 0,
+      right: 0,
+      top:5,
+      bottom: 5,
       position: "absolute"
   },
   radius:{
