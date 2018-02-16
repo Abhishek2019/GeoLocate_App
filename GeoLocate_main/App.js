@@ -51,6 +51,11 @@ class App extends Component{
 
             latitude: 0,
             longitude: 0,
+        },
+
+        longPressCoordinates :{
+            latitude: 0,
+            longitude: 0,
         }
 
     };
@@ -125,6 +130,17 @@ class App extends Component{
 
     }
 
+    onMapLongPress(e){
+
+        longPress = {
+
+            latitude : e.nativeEvent.coordinate.latitude,
+            longitude : e.nativeEvent.coordinate.longitude,
+        };
+
+        this.setState({longPressCoordinates : longPress })
+    }
+
     render(){
       return(
           <View style = {{flex : 1}}>
@@ -132,11 +148,13 @@ class App extends Component{
                   initialRegion = {this.state.initialPosition}
                   style={styles.MapViewStyles}
                   mapType = "standard"
-                  showsMyLocationButton
+                  showsUserLocation = {true}
+                  showsMyLocationButton = {true}
                   showsTraffic = {true}
                   zoomEnabled = {true}
                   loadingEnabled = {true}
-                 showsUserLocation
+
+                  onLongPress={this.onMapLongPress.bind(this)}
               >
 
 
@@ -153,6 +171,14 @@ class App extends Component{
                       {/*</View>*/}
 
                   </MapView.Marker>
+
+                  <MapViewDirections
+                      origin={this.state.markerCoordinates}
+                      destination={this.state.longPressCoordinates}
+                      apikey={GOOGLE_MAPS_APIKEY}
+                      strokeWidth={3}
+                      strokeColor="hotpink"
+                  />
 
               </MapView>
 
