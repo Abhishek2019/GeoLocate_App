@@ -2,14 +2,17 @@ import React,{ Component } from "react";
 import { View, Dimensions } from "react-native";
 import MapView from "react-native-maps";
 import { PermissionsAndroid } from 'react-native';
+import MapViewDirections from 'react-native-maps-directions';
 
 const {width,height} = Dimensions.get("window");
-
+const GOOGLE_MAPS_APIKEY = 'AIzaSyB13MpI1LMJD38RjFfdkoOyI25Rr2OyNV0';
 const SCREEN_H = height;
 const SCREEN_W = width;
 const ASPECT_RATIO = SCREEN_W/SCREEN_H;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+
+
 
 
 async function requestLocationPermission() {
