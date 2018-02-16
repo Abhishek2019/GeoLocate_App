@@ -150,13 +150,19 @@ class App extends Component{
                   mapType = "standard"
                   showsUserLocation = {true}
                   showsMyLocationButton = {true}
-                  showsTraffic = {true}
+                  // showsTraffic = {true}
                   zoomEnabled = {true}
                   loadingEnabled = {true}
 
                   onLongPress={this.onMapLongPress.bind(this)}
               >
 
+
+                  <MapView.Marker
+
+                      coordinate={this.state.longPressCoordinates}
+                      pinColor = {"hotyellow"}
+                  />
 
                   {/*<MapView.UrlTile*/}
                       {/*urlTemplate = "http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"*/}
@@ -165,6 +171,7 @@ class App extends Component{
                   <MapView.Marker
 
                       coordinate={this.state.markerCoordinates}
+
                   >
                       {/*<View style={styles.radius}>*/}
                           {/*<View style={styles.markerStyles}/>*/}
@@ -176,7 +183,7 @@ class App extends Component{
                       origin={this.state.markerCoordinates}
                       destination={this.state.longPressCoordinates}
                       apikey={GOOGLE_MAPS_APIKEY}
-                      strokeWidth={3}
+                      strokeWidth={6}
                       strokeColor="hotpink"
                   />
 
