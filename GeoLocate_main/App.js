@@ -3,6 +3,8 @@ import { View, Dimensions } from "react-native";
 import MapView from "react-native-maps";
 import { PermissionsAndroid } from 'react-native';
 import MapViewDirections from 'react-native-maps-directions';
+import { FloatingAction } from 'react-native-floating-action';
+
 
 const {width,height} = Dimensions.get("window");
 const GOOGLE_MAPS_APIKEY = 'AIzaSyB13MpI1LMJD38RjFfdkoOyI25Rr2OyNV0';
@@ -12,6 +14,28 @@ const ASPECT_RATIO = SCREEN_W/SCREEN_H;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
+
+const actions = [{
+    text: 'Accessibility',
+    icon: require('./src/images/taylor_app_logo.jpg'),
+    name: 'bt_accessibility',
+    position: 2
+}, {
+    text: 'Language',
+    icon: require('./src/images/taylor_app_logo.jpg'),
+    name: 'bt_language',
+    position: 1
+}, {
+    text: 'Location',
+    icon: require('./src/images/taylor_app_logo.jpg'),
+    name: 'bt_room',
+    position: 3
+}, {
+    text: 'Video',
+    icon: require('./src/images/taylor_app_logo.jpg'),
+    name: 'bt_videocam',
+    position: 4
+}];
 
 
 
@@ -191,6 +215,14 @@ class App extends Component{
 
               </MapView>
 
+              <FloatingAction
+                  actions={actions}
+                  onPressItem={
+                      (name) => {
+                          console.log(`selected button: ${name}`);
+                      }
+                  }
+              />
           </View>
 
       );
