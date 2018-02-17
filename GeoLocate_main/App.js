@@ -69,7 +69,8 @@ class App extends Component{
             longitude: 0,
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA,
-            watchID: 0,
+
+
         },
         markerCoordinates : {
 
@@ -80,7 +81,11 @@ class App extends Component{
         longPressCoordinates :{
             latitude: 0,
             longitude: 0,
-        }
+        },
+
+        watchID: 0,
+
+        visibleModeFloatButton : false,
 
     };
 
@@ -162,8 +167,31 @@ class App extends Component{
             longitude : e.nativeEvent.coordinate.longitude,
         };
 
-        this.setState({longPressCoordinates : longPress })
+        this.setState({longPressCoordinates : longPress, visibleModeFloatButton : true })
+
     }
+
+
+    checkModeFloatButton(){
+
+        if(this.state.visibleModeFloatButton){
+            return(
+            <FloatingAction
+                actions={actions}
+                position = "left"
+                showBackground = {true}
+
+                onPressItem={
+                    (name) => {
+                        console.log(`selected button: ${name}`);
+                    }
+                }
+
+            />
+            );
+        }
+    }
+
 
     render(){
       return(
@@ -215,14 +243,9 @@ class App extends Component{
 
               </MapView>
 
-              <FloatingAction
-                  actions={actions}
-                  onPressItem={
-                      (name) => {
-                          console.log(`selected button: ${name}`);
-                      }
-                  }
-              />
+
+              {this.checkModeFloatButton()}
+
           </View>
 
       );
@@ -250,7 +273,7 @@ const styles ={
   },
     markerStyles:{
 
-      height: 20,
+        height: 20,
         width:20,
         borderWidth: 3,
         borderColor: "white",
