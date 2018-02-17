@@ -161,7 +161,7 @@ class App extends Component{
                   <MapView.Marker
 
                       coordinate={this.state.longPressCoordinates}
-                      pinColor = {"hotyellow"}
+                      pinColor = {"darkgreen"}
                   />
 
                   {/*<MapView.UrlTile*/}
@@ -183,8 +183,10 @@ class App extends Component{
                       origin={this.state.markerCoordinates}
                       destination={this.state.longPressCoordinates}
                       apikey={GOOGLE_MAPS_APIKEY}
-                      strokeWidth={6}
+                      strokeWidth={5}
                       strokeColor="hotpink"
+                      // language
+                      alternatives = {true}
                   />
 
               </MapView>
