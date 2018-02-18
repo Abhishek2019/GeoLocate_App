@@ -19,24 +19,24 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 
 const actions = [{
-    text: 'Accessibility',
+    text: 'driving',
     icon: require('./src/images/taylor_app_logo.jpg'),
-    name: 'bt_accessibility',
-    position: 2
-}, {
-    text: 'Language',
-    icon: require('./src/images/taylor_app_logo.jpg'),
-    name: 'bt_language',
+    name: 'mode_drive',
     position: 1
 }, {
-    text: 'Location',
+    text: 'bicycling',
     icon: require('./src/images/taylor_app_logo.jpg'),
-    name: 'bt_room',
+    name: 'mode_bicycle',
+    position: 2
+}, {
+    text: 'walking',
+    icon: require('./src/images/taylor_app_logo.jpg'),
+    name: 'mode_walk',
     position: 3
 }, {
-    text: 'Video',
+    text: 'transit',
     icon: require('./src/images/taylor_app_logo.jpg'),
-    name: 'bt_videocam',
+    name: 'mode_transit',
     position: 4
 }];
 
@@ -86,9 +86,11 @@ class App extends Component{
             longitude: 0,
         },
 
-        watchID: 0,
+        watchID : 0,
 
         visibleModeFloatButton : false,
+
+        modeMap : 'driving',
 
     };
 
@@ -203,7 +205,31 @@ class App extends Component{
 
                 onPressItem={
                     (name) => {
-                        console.log(`selected button: ${name}`);
+
+                        if(name === 'mode_drive'){
+                            console.log(name);
+                            this.setState({modeMap : 'driving'})
+                        }
+                        else if(name === 'mode_bicycle'){
+
+                            console.log(name);
+                            this.setState({modeMap : 'bicycling'})
+
+                        }
+                        else if(name === 'mode_walk'){
+
+                            console.log(name);
+                            this.setState({modeMap : 'walking'})
+
+                        }
+                        else if(name === 'mode_transit'){
+
+                            console.log(name);
+                            this.setState({modeMap : 'transit'})
+
+                        }
+
+
                     }
                 }
 
@@ -256,6 +282,7 @@ class App extends Component{
                       destination={this.state.longPressCoordinates}
                       apikey={GOOGLE_MAPS_APIKEY}
                       strokeWidth={5}
+                      mode = {this.state.modeMap}
                       strokeColor="hotpink"
                       // language
                       alternatives = {true}
