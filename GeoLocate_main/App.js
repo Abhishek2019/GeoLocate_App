@@ -1,9 +1,12 @@
 import React,{ Component } from "react";
-import { View, Dimensions } from "react-native";
+import { View, Dimensions, BackHandler } from "react-native";
 import MapView from "react-native-maps";
 import { PermissionsAndroid } from 'react-native';
 import MapViewDirections from 'react-native-maps-directions';
 import { FloatingAction } from 'react-native-floating-action';
+
+
+import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
 
 
 const {width,height} = Dimensions.get("window");
@@ -96,6 +99,23 @@ class App extends Component{
             this.requestLocationPermission()
 
         }
+
+
+        LocationServicesDialogBox.checkLocationServicesIsEnabled({
+            message: "<h2>Use Location ?</h2>This app wants to change your device settings:<br/><br/>Use GPS, Wi-Fi, and cell network for location<br/><br/><a href='#'>Learn more</a>",
+            ok: "YES",
+            cancel: "NO",
+            enableHighAccuracy: true, // true => GPS AND NETWORK PROVIDER, false => GPS OR NETWORK PROVIDER
+            showDialog: true, // false => Opens the Location access page directly
+            openLocationServices: true, // false => Directly catch method is called if location services are turned off
+            preventOutSideTouch: false, //true => To prevent the location services popup from closing when it is clicked outside
+            preventBackClick: false //true => To prevent the location services popup from closing when it is clicked back button
+        });
+
+        BackHandler.addEventListener('hardwareBackPress', () => { //(optional) you can use it if you need it
+            LocationServicesDialogBox.forceCloseDialog();
+        });
+
 
     }
 
