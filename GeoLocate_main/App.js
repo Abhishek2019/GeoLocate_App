@@ -1,5 +1,5 @@
 import React,{ Component } from "react";
-import { View, Dimensions, BackHandler } from "react-native";
+import { View, Dimensions, BackHandler, Alert } from "react-native";
 import MapView from "react-native-maps";
 import { PermissionsAndroid } from 'react-native';
 import MapViewDirections from 'react-native-maps-directions';
@@ -86,7 +86,7 @@ class App extends Component{
             longitude: 0,
         },
 
-        watchID : 0,
+        watchID : null,
 
         visibleModeFloatButton : false,
 
@@ -183,13 +183,17 @@ class App extends Component{
 
     onMapLongPress(e){
 
+        // alert('Position could not be determined.');
+
         longPress = {
 
             latitude : e.nativeEvent.coordinate.latitude,
             longitude : e.nativeEvent.coordinate.longitude,
         };
 
-        this.setState({longPressCoordinates : longPress, visibleModeFloatButton : true })
+        this.setState({longPressCoordinates : longPress, visibleModeFloatButton : true });
+
+
 
     }
 
@@ -243,7 +247,7 @@ class App extends Component{
       return(
           <View style = {{flex : 1}}>
               <MapView
-                  initialRegion = {this.state.initialPosition}
+                  region = {this.state.initialPosition}
                   style={styles.MapViewStyles}
                   mapType = "standard"
                   showsUserLocation = {true}
