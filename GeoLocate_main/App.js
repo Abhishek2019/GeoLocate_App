@@ -1,9 +1,10 @@
 import React,{ Component } from "react";
-import { View, Dimensions, BackHandler, Alert } from "react-native";
+import { Text,View, Dimensions, BackHandler, Alert } from "react-native";
 import MapView from "react-native-maps";
 import { PermissionsAndroid } from 'react-native';
 import MapViewDirections from 'react-native-maps-directions';
 import { FloatingAction } from 'react-native-floating-action';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
@@ -11,11 +12,15 @@ import LocationServicesDialogBox from "react-native-android-location-services-di
 
 const {width,height} = Dimensions.get("window");
 const GOOGLE_MAPS_APIKEY = 'AIzaSyB13MpI1LMJD38RjFfdkoOyI25Rr2OyNV0';
+const GOOGLE_PLACES_APIKEY = 'AIzaSyBdCRNDm2aRQ9JRcsMVkEKwUGC4aK448K0';
 const SCREEN_H = height;
 const SCREEN_W = width;
 const ASPECT_RATIO = SCREEN_W/SCREEN_H;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+
+const homePlace = { description: 'Home', geometry: { location: { lat: 48.8152937, lng: 2.4597668 } }};
+const workPlace = { description: 'Work', geometry: { location: { lat: 48.8496818, lng: 2.2940881 } }};
 
 
 const actions = [{
@@ -40,6 +45,66 @@ const actions = [{
     position: 4
 }];
 
+
+// const GooglePlacesInput = () =>{
+//
+//     return(
+//         <GooglePlacesAutocomplete
+//             placeholder='Search'
+//             minLength={2} // minimum length of text to search
+//             autoFocus={false}
+//             returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
+//             listViewDisplayed='auto'    // true/false/undefined
+//             fetchDetails={true}
+//             renderDescription={row => row.description} // custom description render
+//             onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
+//                 console.log(data, details);
+//             }}
+//
+//             getDefaultValue={() => ''}
+//
+//             query={{
+//                 // available options: https://developers.google.com/places/web-service/autocomplete
+//                 key: GOOGLE_PLACES_APIKEY,
+//                 language: 'en', // language of the results
+//                 types: '(cities)' // default: 'geocode'
+//             }}
+//
+//             styles={{
+//                 textInputContainer: {
+//                     width: '100%'
+//                 },
+//                 description: {
+//                     fontWeight: 'bold'
+//                 },
+//                 predefinedPlacesDescription: {
+//                     color: '#1faadb'
+//                 }
+//             }}
+//
+//             currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
+//             currentLocationLabel="Current location"
+//             nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
+//             GoogleReverseGeocodingQuery={{
+//                 // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
+//             }}
+//             GooglePlacesSearchQuery={{
+//                 // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
+//                 rankby: 'distance',
+//                 types: 'food'
+//             }}
+//
+//             filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
+//             predefinedPlaces={[homePlace, workPlace]}
+//
+//             debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
+//             renderLeftButton={()  => <Image source={require('path/custom/left-icon')} />}
+//             renderRightButton={() => <Text>Custom text after the input</Text>}
+//         />
+//
+//     );
+//
+// };
 
 
 async function requestLocationPermission() {
@@ -243,9 +308,11 @@ class App extends Component{
     }
 
 
+
     render(){
       return(
           <View style = {{flex : 1}}>
+
               <MapView
                   region = {this.state.initialPosition}
                   style={styles.MapViewStyles}
@@ -292,8 +359,51 @@ class App extends Component{
                       alternatives = {true}
                   />
 
+
+
+
               </MapView>
 
+
+
+              <GooglePlacesAutocomplete
+                  placeholder='Enter Location'
+                  minLength={2}
+                  autoFocus={false}
+                  returnKeyType={'default'}
+                  fetchDetails={true}
+
+                  onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
+                     // console.log(data, details);
+                      alert(data+" "+details);
+                  }}
+
+                  query={{
+                      // available options: https://developers.google.com/places/web-service/autocomplete
+                      key: GOOGLE_MAPS_APIKEY,
+                      language: 'en', // language of the results
+                      // types: '(cities)' // default: 'geocode'
+                  }}
+
+                  styles={{
+                      textInputContainer: {
+                          backgroundColor: 'rgba(0,0,0,0)',
+                          borderTopWidth: 0,
+                          borderBottomWidth:0
+                      },
+                      textInput: {
+                          marginLeft: 0,
+                          marginRight: 0,
+                          height: 38,
+                          color: '#5d5d5d',
+                          fontSize: 16
+                      },
+                      predefinedPlacesDescription: {
+                          color: '#1faadb'
+                      },
+                  }}
+                  currentLocation={false}
+              />
 
               {this.checkModeFloatButton()}
 
@@ -307,8 +417,8 @@ const styles ={
   MapViewStyles:{
       left: 0,
       right: 0,
-      top:5,
-      bottom: 5,
+      top:0,
+      bottom: 0,
       position: "absolute"
   },
   radius:{
