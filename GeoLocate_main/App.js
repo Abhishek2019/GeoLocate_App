@@ -43,7 +43,14 @@ const actions = [{
     icon: require('./src/images/taylor_app_logo.jpg'),
     name: 'mode_transit',
     position: 4
-}];
+},
+    {
+        text: 'speed',
+        icon: require('./src/images/taylor_app_logo.jpg'),
+        name: 'current_speed',
+        position: 5,
+    }
+];
 
 
 // const GooglePlacesInput = () =>{
@@ -152,7 +159,7 @@ class App extends Component{
         },
 
         watchID : null,
-
+        speed : null,
         visibleModeFloatButton : false,
 
         modeMap : 'driving',
@@ -215,8 +222,10 @@ class App extends Component{
 
             ID = navigator.geolocation.watchPosition((position) => {
 
+
             lat = parseFloat(position.coords.latitude);
             lon = parseFloat(position.coords.longitude);
+            currentSpeed = parseFloat(position.coords.speed);
 
             currentPosition = {
                 latitude: lat,
@@ -232,7 +241,7 @@ class App extends Component{
 
 
             this.setState({watchID : ID  ,initialPosition : currentPosition});
-            this.setState({markerCoordinates : currentMarkerPosition});
+            this.setState({markerCoordinates : currentMarkerPosition,speed : currentSpeed});
 
 
         })
@@ -258,8 +267,6 @@ class App extends Component{
 
         this.setState({longPressCoordinates : longPress, visibleModeFloatButton : true });
 
-
-
     }
 
 
@@ -267,6 +274,7 @@ class App extends Component{
 
         if(this.state.visibleModeFloatButton){
             return(
+
             <FloatingAction
                 actions={actions}
                 position = "left"
@@ -298,11 +306,16 @@ class App extends Component{
 
                         }
 
+                        else if(name === 'current_speed'){
+                            alert(this.state.speed)
+                        }
+
 
                     }
                 }
 
             />
+
             );
         }
     }
@@ -355,7 +368,7 @@ class App extends Component{
                       mode = {this.state.modeMap}
                       strokeColor="hotpink"
                       // language
-                      alternatives = {true}
+                      //alternatives = {true}
                   />
 
 
@@ -393,9 +406,10 @@ class App extends Component{
 
                   styles={{
                       textInputContainer: {
-                          backgroundColor: 'rgb(255, 255, 204)',
+                          backgroundColor: 'rgba(0, 0, 0, 0)',
                           borderTopWidth: 0,
-                          borderBottomWidth:0
+                          borderBottomWidth:0,
+                          marginTop: 45,
                       },
                       textInput: {
                           marginLeft: 0,
