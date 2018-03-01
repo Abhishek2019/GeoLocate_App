@@ -160,7 +160,7 @@ class App extends Component{
     };
 
     componentWillMount(){
-
+        console.disableYellowBox = true;
         if(!(PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION))){
 
             this.requestLocationPermission()
@@ -326,7 +326,6 @@ class App extends Component{
                   onLongPress={this.onMapLongPress.bind(this)}
               >
 
-
                   <MapView.Marker
 
                       coordinate={this.state.longPressCoordinates}
@@ -369,13 +368,20 @@ class App extends Component{
               <GooglePlacesAutocomplete
                   placeholder='Enter Location'
                   minLength={2}
-                  autoFocus={false}
+                  autoFocus={true}
                   returnKeyType={'default'}
                   fetchDetails={true}
 
                   onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
-                     // console.log(data, details);
-                      alert(data+" "+details);
+                      console.log(details);
+                      alert("Latitude :"+details.geometry.location.lat+"\nLongitude : "+details.geometry.location.lng);
+
+                      const longPress={
+                          latitude:details.geometry.location.lat,
+                          longitude:details.geometry.location.lng,
+                      };
+                      this.setState({longPressCoordinates : longPress, visibleModeFloatButton : true });
+
                   }}
 
                   query={{
@@ -387,7 +393,7 @@ class App extends Component{
 
                   styles={{
                       textInputContainer: {
-                          backgroundColor: 'rgba(0,0,0,0)',
+                          backgroundColor: 'rgb(255, 255, 204)',
                           borderTopWidth: 0,
                           borderBottomWidth:0
                       },
